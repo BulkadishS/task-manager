@@ -1,4 +1,4 @@
-Made it just for fun
+Made it up just for myself, cause im tired of forgetting things.
 
 Controls:
 
