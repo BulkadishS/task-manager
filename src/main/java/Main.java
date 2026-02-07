@@ -43,8 +43,9 @@ public class Main {
                     default -> System.out.println("Please enter existing number");
                 }
             } catch (InputMismatchException e) {
-                e.printStackTrace();
-                System.out.println("Please write only numbers! " + e);
+                // clean input from mismatched data
+                input.nextLine();
+                System.out.println("Please write only numbers!");
                 choice = -1;
             }
         } while (choice != 0);
