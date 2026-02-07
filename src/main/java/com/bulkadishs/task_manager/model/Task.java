@@ -1,3 +1,5 @@
+package com.bulkadishs.task_manager.model;
+
 import java.time.LocalDate;
 
 public class Task {

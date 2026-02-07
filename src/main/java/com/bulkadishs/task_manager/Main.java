@@ -1,3 +1,7 @@
+package com.bulkadishs.task_manager;
+
+import com.bulkadishs.task_manager.model.Task;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -18,7 +22,7 @@ public class Main {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Welcome in task manager! Choose Options to-do");
-        System.out.println("1 - Create New Task\n2 - View Tasks \n3 - Update Task\n4 - Delete Task\n\n0 - Quit");
+        System.out.println("1 - Create New Task\n2 - View Tasks \n3 - Update com Task\n4 - Delete Task\n\n0 - Quit");
 
         taskManager(input);
     }
@@ -79,30 +83,32 @@ public class Main {
         if (taskStorage.isEmpty()) {
             printNoTasks();
         } else {
-            System.out.println("Choose one of the tasks, to edit:");
+            System.out.println("Enter number of the task, that you want to edit:");
             showEachTask();
-
             int replaceChoice;
             do {
-                replaceChoice = input.nextByte();
+                replaceChoice = input.nextInt();
+                input.nextLine();
+
 
             } while (replaceChoice != 0);
         }
     }
 
 
-    private static void showEachTask() {
-        int counter = 0;
+    private static int showEachTask() {
+        int index = 0;
         for (Task eachTask : taskStorage) {
-            counter++;
+            index++;
             System.out.println(
-                    counter +
+                    index +
                             ". Title: " + eachTask.getTitle() +
                             ", Description: " + eachTask.getDescription() +
                             ", Creation Date: " + eachTask.getDate() +
                             (eachTask.getIsCompleted() ? " [DONE]" : " [UNDONE]")
             );
         }
+        return index;
     }
 
     private static void printNoTasks() {
