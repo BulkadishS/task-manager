@@ -2,6 +2,8 @@ package com.bulkadishs.task_manager;
 
 import com.bulkadishs.task_manager.model.Task;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -16,13 +18,13 @@ public class Main {
 
     public static void run() {
         // debugging
-        Task test = new Task("ТЕСТИРОВАНИЕ", "ТЕСТИРОВАНИЕ ОПИСАНИЕ", LocalDate.now(), false);
-        taskStorage.add(test);
+//        Task test = new Task("ТЕСТИРОВАНИЕ", "ТЕСТИРОВАНИЕ ОПИСАНИЕ", LocalDate.now(), false);
+//        taskStorage.add(test);
 
         Scanner input = new Scanner(System.in);
 
         System.out.println("Welcome in task manager! Choose Options to-do");
-        System.out.println("1 - Create New Task\n2 - View Tasks \n3 - Update com Task\n4 - Delete Task\n\n0 - Quit");
+        System.out.println("1 - Create New Task\n2 - View Tasks \n3 - Update Task\n4 - Delete Task\n\n0 - Quit");
 
         taskManager(input);
     }
@@ -44,6 +46,7 @@ public class Main {
                     case 1 -> createTask(input);
                     case 2 -> readTasks();
                     case 3 -> updateTask(input);
+                    case 4 -> deleteTask(input);
                     default -> System.out.println("Please enter existing number");
                 }
             } catch (InputMismatchException e) {
@@ -56,12 +59,12 @@ public class Main {
     }
 
 
-    private static void createTask(Scanner choiceOne) {
+    private static void createTask(Scanner input) {
         System.out.println("Enter task name:");
-        String name = choiceOne.nextLine();
+        String name = input.nextLine();
 
         System.out.println("Enter description:");
-        String desc = choiceOne.nextLine();
+        String desc = input.nextLine();
 
         Task task = new Task(name, desc, LocalDate.now(), false);
         taskStorage.add(task);
@@ -83,20 +86,53 @@ public class Main {
         if (taskStorage.isEmpty()) {
             printNoTasks();
         } else {
-            System.out.println("Enter number of the task, that you want to edit:");
+            System.out.println("Enter number of the task, that you want to mark as done:");
             showEachTask();
-            int replaceChoice;
-            do {
-                replaceChoice = input.nextInt();
-                input.nextLine();
 
+            int index = input.nextInt() - 1;
 
-            } while (replaceChoice != 0);
+            if (index >= 0 && index < taskStorage.size()) {
+                Task choosedTask = taskStorage.get(index);
+                choosedTask.setIsCompleted(true);
+                System.out.println("Marked as completed, well done!");
+            } else {
+                System.out.println("Please choose existing one task!");
+            }
         }
     }
 
 
-    private static int showEachTask() {
+    private static void deleteTask(Scanner input) {
+        if (taskStorage.isEmpty()) {
+            printNoTasks();
+        } else {
+            System.out.println("Enter number of the task, that you want to delete:");
+            showEachTask();
+            int index = input.nextInt() - 1;
+
+            if (index >= 0 && index < taskStorage.size()) {
+                Task choosedTask = taskStorage.get(index);
+                taskStorage.remove(choosedTask);
+                System.out.println("Successfully removed task number [" + (index + 1) + "]!");
+            } else {
+                System.out.println("Please choose existing one task!");
+            }
+        }
+    }
+
+//    private static void createStorageFile() throws FileNotFoundException{
+//        try {
+//            String separator = File.separator;
+//            String path = separator + "Users" + separator + "denis_wr40x3z" + separator + "IdeaProjects" + separator + "learn" + separator + "src" + separator + "main" + separator + "java" + separator + "com" + separator + "bulkadishs" + separator + "task_manager" + separator + "storage";
+//
+//            File userStorage = new File(path);
+//
+//        } catch (FileNotFoundException) {
+//            System.out.println("");
+//        }
+//    }
+
+    private static void showEachTask() {
         int index = 0;
         for (Task eachTask : taskStorage) {
             index++;
@@ -108,7 +144,6 @@ public class Main {
                             (eachTask.getIsCompleted() ? " [DONE]" : " [UNDONE]")
             );
         }
-        return index;
     }
 
     private static void printNoTasks() {
